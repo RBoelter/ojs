@@ -18,5 +18,6 @@
 	"watchForFileChanges": false,
 	"defaultCommandTimeout": 10000,
 	"video": false,
-	"numTestsKeptInMemory": 0
+	"numTestsKeptInMemory": 0,
+	"baseUrl": "http://localhost:8000"
 }

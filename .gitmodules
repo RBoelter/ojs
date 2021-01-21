@@ -50,3 +50,15 @@
 [submodule "plugins/generic/googleScholar"]
 	path = plugins/generic/googleScholar
 	url = https://github.com/pkp/googleScholar
+[submodule "plugins/generic/mostViewed"]
+	path = plugins/generic/mostViewed
+	url = https://github.com/RBoelter/mostViewed
+[submodule "plugins/blocks/twitterBlock"]
+	path = plugins/blocks/twitterBlock
+	url = https://github.com/RBoelter/twitterBlock
+[submodule "plugins/blocks/announcementsBlock"]
+	path = plugins/blocks/announcementsBlock
+	url = https://github.com/RBoelter/announcementsBlock
+[submodule "plugins/generic/citations"]
+	path = plugins/generic/citations
+	url = https://github.com/RBoelter/citations

@@ -62,3 +62,12 @@
 [submodule "plugins/generic/citations"]
 	path = plugins/generic/citations
 	url = https://github.com/RBoelter/citations
+[submodule "plugins/generic/psychopen-aam"]
+	path = plugins/generic/psychopen-aam
+	url = https://github.com/leibniz-psychology/psychopen-aam
+[submodule "plugins/generic/openid"]
+	path = plugins/generic/openid
+	url = https://github.com/leibniz-psychology/pkp-openid
+[submodule "plugins/generic/futureIssueOverview"]
+	path = plugins/generic/futureIssueOverview
+	url = https://github.com/leibniz-psychology/psychopen-futureIssue

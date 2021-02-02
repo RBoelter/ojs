@@ -3,8 +3,8 @@
 /**
  * @file pages/article/ArticleHandler.inc.php
  *
- * Copyright (c) 2014-2020 Simon Fraser University
- * Copyright (c) 2003-2020 John Willinsky
+ * Copyright (c) 2014-2021 Simon Fraser University
+ * Copyright (c) 2003-2021 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class ArticleHandler
@@ -48,14 +48,28 @@ class ArticleHandler extends Handler {
 		// Permit the use of the Authorization header and an API key for access to unpublished/subscription content
 		if ($header = array_search('Authorization', array_flip(getallheaders()))) {
 			list($bearer, $jwt) = explode(' ', $header);
-			if (strcasecmp($bearer, 'Bearer') == 0) {
-				$apiToken = JWT::decode($jwt, Config::getVar('security', 'api_key_secret', ''), array('HS256'));
-				// Compatibility with old API keys
-				// https://github.com/pkp/pkp-lib/issues/6462
-				if (substr($apiToken, 0, 2) === '""') {
-					$apiToken = json_decode($apiToken);
+			if (strcasecmp($bearer, 'Bearer') == 0 && !empty($jwt)) {
+				$secret = Config::getVar('security', 'api_key_secret', '');
+				if (!$secret) {
+					AppLocale::requireComponents(LOCALE_COMPONENT_PKP_API);
+					$templateMgr = TemplateManager::getManager($request);
+					$templateMgr->assign('message', 'api.500.apiSecretKeyMissing');
+					return $templateMgr->display('frontend/pages/message.tpl');
 				}
-				$this->setApiToken($apiToken);
+				try {
+					$apiToken = JWT::decode($jwt, $secret, array('HS256'));
+					// Compatibility with old API keys
+					// https://github.com/pkp/pkp-lib/issues/6462
+					if (substr($apiToken, 0, 2) === '""') {
+						$apiToken = json_decode($apiToken);
+					}
+					$this->setApiToken($apiToken);
+				} catch (Exception $e) {
+					AppLocale::requireComponents(LOCALE_COMPONENT_PKP_API);
+					$templateMgr = TemplateManager::getManager($request);
+					$templateMgr->assign('message', 'api.400.invalidApiToken');
+					return $templateMgr->display('frontend/pages/message.tpl');
+				}
 			}
 		}
 
@@ -394,6 +408,7 @@ class ArticleHandler extends Handler {
 
 			// If the file ID is not the galley's file ID, ensure it is a dependent file, or else 404.
 			if ($this->fileId != $this->galley->getData('submissionFileId')) {
+				import('lib.pkp.classes.submission.SubmissionFile'); // Constants
 				$dependentFileIds = Services::get('submissionFile')->getIds([
 					'assocTypes' => [ASSOC_TYPE_SUBMISSION_FILE],
 					'assocIds' => [$this->galley->getFileId()],

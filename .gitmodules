@@ -71,3 +71,6 @@
 [submodule "plugins/generic/futureIssueOverview"]
 	path = plugins/generic/futureIssueOverview
 	url = https://github.com/leibniz-psychology/psychopen-futureIssue
+[submodule "plugins/themes/psychopen"]
+	path = plugins/themes/psychopen
+	url = https://github.com/leibniz-psychology/psychopen-theme
